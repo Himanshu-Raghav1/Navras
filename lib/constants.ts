@@ -2,8 +2,27 @@
 // NAVRAS × Dhvani — Global Constants
 // ===================================================
 
-/** Registration/Ticket URL — update this ONE value when Google Form link is available */
-export const REGISTRATION_URL = "#details";
+/** Registration/Ticket URL — official Google Form link */
+export const REGISTRATION_URL = "https://forms.gle/Q9A6tLLH7Jrz2foL9";
+
+/** Dhvani Instagram URL */
+export const INSTAGRAM_URL = "https://www.instagram.com/dhvani.mitwpu";
+
+// Event Contacts / Queries
+export const CONTACTS = [
+  {
+    name: "Soham More",
+    role: "HOD Events, Dhvani",
+    phone: "7506063433",
+    displayPhone: "7506063433",
+  },
+  {
+    name: "Parth Singhal",
+    role: "HOD Operations and Logistics, Dhvani",
+    phone: "8830030113",
+    displayPhone: "8830030113",
+  },
+] as const;
 
 // Event Details
 export const EVENT = {
@@ -21,75 +40,93 @@ export const EVENT = {
 export const RASAS = [
   {
     id: "shringar",
-    name: "Śṛṅgāra",
+    name: "Shringar",
+    displayName: "SHRINGAR",
     devanagari: "शृंगार",
     meaning: "Love & Beauty",
-    color: "#C93724",
-    description: "The rasa of love, beauty, and aesthetic delight — the most celebrated of all emotions.",
+    color: "#E29328",
+    description: "The rasa of love, beauty, and aesthetic delight — the tender feeling of affection and universal devotion.",
+    image: "/assets/rasa/sringaar.png",
   },
   {
     id: "hasya",
-    name: "Hāsya",
+    name: "Hasya",
+    displayName: "HASYA",
     devanagari: "हास्य",
     meaning: "Joy & Laughter",
-    color: "#E87924",
-    description: "The rasa of joy, humour, and laughter — light-heartedness that uplifts the spirit.",
+    color: "#803522",
+    description: "The rasa of joy, humour, and laughter — vibrant shared amusement that uplifts the human spirit.",
+    image: "/assets/rasa/Hasya.png",
   },
   {
     id: "karuna",
-    name: "Karuṇā",
+    name: "Karuna",
+    displayName: "KARUNA",
     devanagari: "करुणा",
     meaning: "Compassion",
-    color: "#D6A52E",
-    description: "The rasa of compassion, sorrow, and empathy — the tender ache of feeling deeply.",
+    color: "#3762A2",
+    description: "The rasa of compassion, empathy, and tender grief — the sacred ability to feel deeply for another.",
+    image: "/assets/rasa/karuna.png",
   },
   {
     id: "raudra",
     name: "Raudra",
+    displayName: "RAUDRA",
     devanagari: "रौद्र",
     meaning: "Fury",
-    color: "#8B1A1A",
-    description: "The rasa of fury and passion — the fierce force of righteous anger.",
+    color: "#7D1518",
+    description: "The rasa of righteous fury and fiery passion — the fierce energy of truth dismantling deceit.",
+    image: "/assets/rasa/rudra.png",
   },
   {
     id: "vira",
-    name: "Vīra",
+    name: "Veer",
+    displayName: "VEER",
     devanagari: "वीर",
     meaning: "Courage",
-    color: "#087D78",
-    description: "The rasa of heroism and courage — the strength that drives action and purpose.",
+    color: "#9C4791",
+    description: "The rasa of heroism, chivalry, and valor — the steadfast resolve to step forward without hesitation.",
+    image: "/assets/rasa/veer.png",
   },
   {
     id: "bhayanaka",
-    name: "Bhayānaka",
+    name: "Bhayanak",
+    displayName: "BHAYANAK",
     devanagari: "भयानक",
     meaning: "Fear",
-    color: "#2D4A7A",
-    description: "The rasa of fear and dread — the powerful sensation of the unknown.",
+    color: "#4C1F57",
+    description: "The rasa of awe, suspense, and trembling apprehension — feeling the vastness of the mysterious unknown.",
+    image: "/assets/rasa/bhayankar.png",
   },
   {
     id: "bibhatsa",
-    name: "Bībhatsa",
+    name: "Bibhatsa",
+    displayName: "BIBHATS",
     devanagari: "बीभत्स",
     meaning: "Aversion",
-    color: "#4C7D52",
-    description: "The rasa of disgust and aversion — the raw reaction that defines boundaries.",
+    color: "#5B853F",
+    description: "The rasa of disgust and moral aversion — the vital instinct that turns away from decay toward purity.",
+    image: "/assets/rasa/vibhatsa.png",
   },
   {
     id: "adbhuta",
-    name: "Adbhuta",
+    name: "Adbhut",
+    displayName: "ADBHUT",
     devanagari: "अद्भुत",
     meaning: "Wonder",
-    color: "#7B3FA0",
-    description: "The rasa of wonder and amazement — the sublime sensation of encountering the extraordinary.",
+    color: "#275878",
+    description: "The rasa of wonder, curiosity, and astonishment — the breathless sensation of beholding the extraordinary.",
+    image: "/assets/rasa/Adbhut.png",
   },
   {
     id: "shanta",
-    name: "Śānta",
+    name: "Shanta",
+    displayName: "SHANTA",
     devanagari: "शांत",
     meaning: "Peace",
-    color: "#C97B8A",
-    description: "The rasa of tranquility and peace — the still point where all emotions come to rest.",
+    color: "#BC6825",
+    description: "The rasa of tranquility, stillness, and supreme serenity — the eternal calm where all emotions harmoniously unite.",
+    image: "/assets/rasa/shaant.png",
   },
 ] as const;
 
@@ -98,25 +135,25 @@ export const HIGHLIGHTS = [
   {
     id: "live-music",
     title: "LIVE MUSIC",
-    description: "2 hours of instrumental and vocal performance",
+    description: "2 hours of live vocal & instrumental music by fellow students",
     image: "/assets/live_music.png",
   },
   {
     id: "garba",
-    title: "GARBA WITH FRIENDS",
-    description: "Feel the rhythm, move together",
+    title: "GARBA NIGHT",
+    description: "Garba nights that go on all evening",
     image: "/assets/garba_with_friends.png",
   },
   {
     id: "food",
-    title: "STALLS",
-    description: "Food, fun and exciting stalls",
+    title: "FOOD & STALLS",
+    description: "Food & Student Entrepreneurship stalls to fuel celebration",
     image: "/assets/food_stall.png",
   },
   {
     id: "cultural",
-    title: "CULTURAL EXTRAVAGANZA",
-    description: "A vibrant celebration of diversity",
+    title: "CULTURAL EXPO",
+    description: "A cultural expo showcasing the many colours of Bharat",
     image: "/assets/culture.png",
   },
 ] as const;

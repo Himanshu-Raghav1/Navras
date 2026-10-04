@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { fadeUp, slideLeft, slideRight, staggerChildren } from "@/lib/animations";
+import { fadeUp, slideRight, staggerChildren } from "@/lib/animations";
 import { REGISTRATION_URL } from "@/lib/constants";
 
 export default function AboutNavras() {
@@ -73,6 +73,8 @@ export default function AboutNavras() {
             <motion.div variants={fadeUp}>
               <a
                 href={REGISTRATION_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-primary"
                 id="about-know-more-cta"
               >

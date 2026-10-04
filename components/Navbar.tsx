@@ -96,6 +96,8 @@ export default function Navbar() {
           <div className="navbar__actions">
             <a
               href={REGISTRATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="navbar__cta-btn"
               id="navbar-ticket-cta"
               aria-label="Register Now for Navras 2026"
@@ -147,6 +149,8 @@ export default function Navbar() {
 
         <a
           href={REGISTRATION_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="hero-mobile-btn mobile-menu__cta"
           onClick={() => setMenuOpen(false)}
         >
