@@ -154,7 +154,6 @@ export default function RasaSection() {
                         fill
                         sizes="(max-width: 768px) 130px, 160px"
                         className="rasa-card__img"
-                        priority={index < 4}
                       />
                       <div className="rasa-card__overlay" />
                     </div>

@@ -1,5 +1,29 @@
 import type { Metadata, Viewport } from "next";
+import { Playfair_Display, DM_Sans, Tiro_Devanagari_Sanskrit } from "next/font/google";
 import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "900"],
+  style: ["normal", "italic"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+const tiroDevanagari = Tiro_Devanagari_Sanskrit({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-devanagari",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "NAVRAS 2026 — Nine Emotions, Countless Rhythms | Dhvani × MIT-WPU",
@@ -31,11 +55,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${playfair.variable} ${dmSans.variable} ${tiroDevanagari.variable}`}
+    >
       <head>
-        {/* Preconnect to Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preload only the appropriate responsive hero image based on viewport */}
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/hero/hero_navras_mobile.webp"
+          type="image/webp"
+          media="(max-width: 819px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/assets/hero/hero_navras.webp"
+          type="image/webp"
+          media="(min-width: 820px)"
+          fetchPriority="high"
+        />
       </head>
       <body suppressHydrationWarning>{children}</body>
     </html>
