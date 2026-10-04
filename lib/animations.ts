@@ -2,16 +2,20 @@
 // NAVRAS × Dhvani — Animation Variants (Framer Motion)
 // ===================================================
 
-export const fadeUp = {
+import type { Variants } from "framer-motion";
+
+const EASE_CUBIC: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+export const fadeUp: Variants = {
   hidden: { opacity: 0, y: 32 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease: EASE_CUBIC },
   },
 };
 
-export const fadeIn = {
+export const fadeIn: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -19,34 +23,34 @@ export const fadeIn = {
   },
 };
 
-export const scaleIn = {
+export const scaleIn: Variants = {
   hidden: { opacity: 0, scale: 0.88 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, ease: EASE_CUBIC },
   },
 };
 
-export const slideLeft = {
+export const slideLeft: Variants = {
   hidden: { opacity: 0, x: -40 },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease: EASE_CUBIC },
   },
 };
 
-export const slideRight = {
+export const slideRight: Variants = {
   hidden: { opacity: 0, x: 40 },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.7, ease: EASE_CUBIC },
   },
 };
 
-export const staggerChildren = {
+export const staggerChildren: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -56,7 +60,7 @@ export const staggerChildren = {
   },
 };
 
-export const staggerChildrenFast = {
+export const staggerChildrenFast: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -67,7 +71,7 @@ export const staggerChildrenFast = {
 };
 
 /** Reduced motion safe: disables all animations */
-export const reducedMotionVariant = {
+export const reducedMotionVariant: Variants = {
   hidden: { opacity: 1, y: 0, x: 0, scale: 1 },
   visible: { opacity: 1, y: 0, x: 0, scale: 1 },
 };
