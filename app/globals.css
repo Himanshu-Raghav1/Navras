@@ -1203,13 +1203,17 @@ img, picture {
    ═══════════════════════════════════════════════════ */
 .rasa-carousel__viewport {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: visible;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
   padding: 1.25rem 0.25rem 2rem;
   perspective: 1400px;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.rasa-carousel__viewport:active {
+  cursor: grabbing;
 }
 
 .rasa-carousel__viewport::-webkit-scrollbar {

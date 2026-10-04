@@ -1,9 +1,25 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+} from "framer-motion";
 import { RASAS } from "@/lib/constants";
+
+// 4 repetitions for seamless infinite looping during page-scroll and manual navigation:
+// Set 0 (initial view), Set 1 (middle loop), Set 2 (second loop), Set 3 (extended buffer)
+const LOOPED_RASAS = [
+  ...RASAS.map((r, i) => ({ ...r, uniqueKey: `set0-${r.id}`, loopIndex: i })),
+  ...RASAS.map((r, i) => ({ ...r, uniqueKey: `set1-${r.id}`, loopIndex: i })),
+  ...RASAS.map((r, i) => ({ ...r, uniqueKey: `set2-${r.id}`, loopIndex: i })),
+  ...RASAS.map((r, i) => ({ ...r, uniqueKey: `set3-${r.id}`, loopIndex: i })),
+];
 
 export default function RasaSection() {
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -11,7 +27,24 @@ export default function RasaSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-linked progress driving the unified product carousel
+  // Measure dynamic set distance for responsive screen widths
+  const [setDistance, setSetDistance] = useState(1548);
+
+  useEffect(() => {
+    const calcDistance = () => {
+      if (typeof window !== "undefined") {
+        const isMobile = window.innerWidth < 860;
+        // Desktop: 9 * (152px card + 20px gap) = 1548px
+        // Mobile: 9 * (134px card + 20px gap) = 1386px
+        setSetDistance(isMobile ? 1386 : 1548);
+      }
+    };
+    calcDistance();
+    window.addEventListener("resize", calcDistance);
+    return () => window.removeEventListener("resize", calcDistance);
+  }, []);
+
+  // 1. Page-Scroll Linked Progress
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -23,27 +56,95 @@ export default function RasaSection() {
     mass: 0.6,
   });
 
-  // Entire sequence slides together all at once like a product carousel:
-  // 1. Start: 0px (Card 1 Shringar fully visible at left)
-  // 2. Initial scroll: slides from left to right (0px to +55px)
-  // 3. Mid scroll: smoothly glides right to left (+55px to -390px), showcasing all 9 emotions in order
-  // 4. Late scroll: finishes glide (-450px)
-  const trackX = useTransform(
+  // When scrolling the page, cards smoothly slide horizontally across the screen.
+  // After Card 9 (Shanta), Card 1 (Shringar) seamlessly slides in next in the loop!
+  const pageScrollX = useTransform(
     smoothProgress,
-    [0, 0.22, 0.78, 1],
-    [0, 55, -390, -450]
+    [0, 0.18, 0.82, 1],
+    [50, 0, -setDistance, -(setDistance + 220)]
   );
 
-  // "Last part goes forward": 3D elevation and scale for latter cards as you scroll through
-  const endCardScale = useTransform(smoothProgress, [0.45, 0.75, 0.95], [1, 1.08, 1.16]);
-  const endCardZ = useTransform(smoothProgress, [0.45, 0.75, 0.95], [0, 30, 70]);
+  // 2. Manual Nudge Offset (for Arrow buttons & Dragging)
+  const manualX = useMotionValue(0);
+  const springManualX = useSpring(manualX, {
+    stiffness: 95,
+    damping: 24,
+    mass: 0.5,
+  });
 
-  // Arrow controls for manual carousel nudging
+  // Combine page-scroll slide + manual nudge seamlessly
+  const combinedX = useTransform(
+    [pageScrollX, springManualX],
+    ([ps, mx]) => (ps as number) + (mx as number)
+  );
+
+  // 3D elevation and subtle scale for cards during scroll progress
+  const endCardScale = useTransform(smoothProgress, [0.45, 0.75, 0.95], [1, 1.06, 1.12]);
+  const endCardZ = useTransform(smoothProgress, [0.45, 0.75, 0.95], [0, 24, 60]);
+
+  // Arrow controls for manual carousel nudging (cycles infinitely across cards)
   const scrollTrack = (direction: "left" | "right") => {
-    if (trackRef.current) {
-      const scrollAmount = direction === "left" ? -280 : 280;
-      trackRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    const cardStep = setDistance / 9; // width of 1 card + gap
+    const nudgeAmount = cardStep * 1.5;
+    const current = manualX.get();
+    const next = direction === "left" ? current + nudgeAmount : current - nudgeAmount;
+
+    // Infinite wrap for manual offsets
+    if (next < -setDistance * 1.5) {
+      manualX.set(next + setDistance);
+    } else if (next > setDistance * 0.5) {
+      manualX.set(next - setDistance);
+    } else {
+      manualX.set(next);
     }
+  };
+
+  // Pointer drag handling for both desktop mouse and mobile touch
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startManualXRef = useRef(0);
+  const hasDraggedRef = useRef(false);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    hasDraggedRef.current = false;
+    startXRef.current = e.clientX;
+    startManualXRef.current = manualX.get();
+    try {
+      (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    } catch {}
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const deltaX = e.clientX - startXRef.current;
+    if (Math.abs(deltaX) > 6) {
+      hasDraggedRef.current = true;
+    }
+    manualX.set(startManualXRef.current + deltaX * 1.15);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {}
+
+      // Wrap if user dragged past a full set
+      const current = manualX.get();
+      if (current < -setDistance * 1.5) {
+        manualX.set(current + setDistance);
+      } else if (current > setDistance * 0.5) {
+        manualX.set(current - setDistance);
+      }
+    }
+  };
+
+  // Card click: toggle narrative panel (prevented if user was dragging)
+  const handleCardClick = (rasaId: string) => {
+    if (hasDraggedRef.current) return;
+    setActiveId((prev) => (prev === rasaId ? null : rasaId));
   };
 
   return (
@@ -113,22 +214,28 @@ export default function RasaSection() {
           </div>
         </div>
 
-        {/* 3D Perspective Carousel Container */}
-        <div className="rasa-carousel__viewport" ref={trackRef}>
+        {/* 3D Perspective Infinite Carousel Container */}
+        <div
+          className="rasa-carousel__viewport"
+          ref={trackRef}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
           <motion.div
             className="rasa-carousel__track"
-            style={{ x: trackX }}
+            style={{ x: combinedX }}
             role="list"
-            aria-label="Nine Rasa cards sequence"
+            aria-label="Infinite Nine Rasa cards sequence"
           >
-            {RASAS.map((rasa, index) => {
+            {LOOPED_RASAS.map((rasa, index) => {
               const isActive = activeId === rasa.id;
-              // 7th (Bibhats), 8th (Adbhut), 9th (Shanta) - the "last part" that steps forward in 3D
-              const isLastPart = index >= 6;
+              const isLastPart = (index % 9) >= 6;
 
               return (
                 <motion.div
-                  key={rasa.id}
+                  key={rasa.uniqueKey}
                   className="rasa-card-wrap"
                   style={{
                     scale: isLastPart ? endCardScale : 1,
@@ -138,13 +245,13 @@ export default function RasaSection() {
                   <button
                     type="button"
                     role="listitem"
-                    aria-label={`${index + 1}. ${rasa.displayName} (${rasa.devanagari}) — ${rasa.meaning}`}
+                    aria-label={`${rasa.displayName} (${rasa.devanagari}) — ${rasa.meaning}`}
                     aria-pressed={isActive}
                     className={`rasa-card ${isActive ? "rasa-card--active" : ""}`}
                     style={{
                       "--card-color": rasa.color,
                     } as React.CSSProperties}
-                    onClick={() => setActiveId(isActive ? null : rasa.id)}
+                    onClick={() => handleCardClick(rasa.id)}
                   >
                     {/* Arched temple dome frame with poster art */}
                     <div className="rasa-card__arch-wrap">
@@ -152,7 +259,7 @@ export default function RasaSection() {
                         src={rasa.image}
                         alt={`${rasa.displayName} (${rasa.devanagari})`}
                         fill
-                        sizes="(max-width: 768px) 130px, 160px"
+                        sizes="(max-width: 768px) 134px, 152px"
                         className="rasa-card__img"
                       />
                       <div className="rasa-card__overlay" />
@@ -175,10 +282,10 @@ export default function RasaSection() {
 
         {/* Swipe / scroll guidance */}
         <p className="rasa__hint" aria-hidden="true">
-          ✦ Scroll page to glide the carousel • Swipe or tap any emotion to explore ✦
+          ✦ Scroll page to glide the carousel • Drag or use arrows to explore in loop ✦
         </p>
 
-        {/* Expanded Description Panel — Last part comes forward with rich narrative */}
+        {/* Expanded Description Panel — Rich narrative details on card selection */}
         <AnimatePresence>
           {activeRasa && (
             <motion.div
