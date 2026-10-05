@@ -29,7 +29,7 @@ export const EVENT = {
   name: "NAVRAS",
   date: "16 October 2026",
   dayOfWeek: "Thursday",
-  time: "4:00 PM – 9:00 PM",
+  time: "Starts at 3p.m.",
   venue: "Vyas Terrace",
   floor: "8th Floor",
   institution: "MIT-WPU",
