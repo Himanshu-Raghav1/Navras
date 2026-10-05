@@ -507,6 +507,7 @@ img, picture {
     height: auto;
     aspect-ratio: 830 / 1792;
     object-fit: cover;
+    object-position: 37% center;
   }
   .hero-overlay-details {
     display: none !important;
@@ -632,7 +633,7 @@ img, picture {
 .hero-mobile-overlay {
   position: absolute;
   top: 37%;
-  left: 43%;
+  left: 47%;
   transform: translateX(-50%);
   width: min(92%, 350px);
   display: flex;
