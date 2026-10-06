@@ -3,7 +3,7 @@
 // ===================================================
 
 /** Registration/Ticket URL — official Google Form link */
-export const REGISTRATION_URL = "https://forms.gle/Q9A6tLLH7Jrz2foL9";
+export const REGISTRATION_URL = "https://forms.gle/Wh94RVU34AG4h5ii6";
 
 /** Dhvani Instagram URL */
 export const INSTAGRAM_URL = "https://www.instagram.com/dhvani.mitwpu";
