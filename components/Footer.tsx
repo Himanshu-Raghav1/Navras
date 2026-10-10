@@ -144,7 +144,15 @@ export default function Footer() {
       <div className="footer__bottom">
         <div className="container footer__bottom-inner">
           <p className="footer__copy">
-            &copy; {year} Dhvani, The Music Community · MIT-WPU · All rights reserved.
+            &copy; {year} Dhvani, The Music Community · MIT-WPU · All rights reserved · Crafted with ❤️ by{" "}
+            <a
+              href="https://www.linkedin.com/in/himanshu-raghav7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer__credit-link"
+            >
+              Himanshu Raghav
+            </a>
           </p>
 
           <a

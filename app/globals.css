@@ -2028,7 +2028,19 @@ img, picture {
 
 .footer__copy {
   font-size: 0.75rem;
-  color: rgba(255, 248, 231, 0.4);
+  color: rgba(255, 248, 231, 0.45);
+}
+
+.footer__credit-link {
+  color: var(--gold-light);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.footer__credit-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .footer__bottom-insta {
@@ -2118,5 +2130,269 @@ img, picture {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Exempt Theatrical Curtain Intro so it ALWAYS plays smoothly on all devices
+     regardless of OS battery saver, power mode, or animation settings */
+  .curtain-stage,
+  .curtain-stage *,
+  .curtain-stage *::before,
+  .curtain-stage *::after {
+    animation-duration: revert !important;
+    transition-duration: revert !important;
+    scroll-behavior: revert !important;
+  }
+}
+
+/* ===================================================
+   15. THEATRICAL CURTAIN INTRO (Fabric Gathering from Center)
+   =================================================== */
+.curtain-stage {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  overflow: hidden;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  background: transparent;
+  transition: opacity 0.5s ease;
+}
+
+.curtain-stage--opening {
+  pointer-events: none !important;
+}
+
+.curtain-stage--fading {
+  opacity: 0;
+  pointer-events: none !important;
+}
+
+/* ── Curtain Wings (Left & Right halves) ── */
+.curtain-wing {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.1vw;
+  height: 100vh;
+  z-index: 20;
+  will-change: transform;
+  transform: translateX(0);
+  transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.curtain-wing--left {
+  left: 0;
+  box-shadow: 18px 0 50px rgba(0, 0, 0, 0.85);
+}
+
+/* Left curtain pulls cleanly to the left wall with its golden border */
+.curtain-wing--left.is-open {
+  transform: translateX(-100%);
+}
+
+.curtain-wing--right {
+  right: 0;
+  box-shadow: -18px 0 50px rgba(0, 0, 0, 0.85);
+}
+
+/* Right curtain pulls cleanly to the right wall with its golden border */
+.curtain-wing--right.is-open {
+  transform: translateX(100%);
+}
+
+/* ── Individual Velvet Folds / Pleats (Accordion Bunching) ── */
+.curtain-gather-track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.curtain-fold {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22%;
+  background: linear-gradient(
+    90deg,
+    #170202 0%,
+    #330606 12%,
+    #5c1111 32%,
+    #821a1a 48%,
+    #9c2424 58%,
+    #611313 78%,
+    #240404 100%
+  );
+  box-shadow: 
+    -6px 0 18px rgba(0, 0, 0, 0.65),
+    inset -3px 0 12px rgba(0, 0, 0, 0.5),
+    inset 3px 0 12px rgba(255, 120, 120, 0.08);
+  will-change: transform;
+  transform: translateX(0);
+  transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Left panel fold positioning */
+.curtain-wing--left .curtain-fold--1 { left: 0%;   z-index: 1; }
+.curtain-wing--left .curtain-fold--2 { left: 16%;  z-index: 2; }
+.curtain-wing--left .curtain-fold--3 { left: 32%;  z-index: 3; }
+.curtain-wing--left .curtain-fold--4 { left: 48%;  z-index: 4; }
+.curtain-wing--left .curtain-fold--5 { left: 64%;  z-index: 5; }
+.curtain-wing--left .curtain-fold--6 { left: 80%;  z-index: 6; width: 23%; }
+
+/* Left folds accordion-compress inward toward the left wing as the curtain pulls open */
+.curtain-wing--left.is-open .curtain-fold--6 { transform: translateX(-15%); }
+.curtain-wing--left.is-open .curtain-fold--5 { transform: translateX(-25%); }
+.curtain-wing--left.is-open .curtain-fold--4 { transform: translateX(-35%); }
+.curtain-wing--left.is-open .curtain-fold--3 { transform: translateX(-45%); }
+.curtain-wing--left.is-open .curtain-fold--2 { transform: translateX(-55%); }
+.curtain-wing--left.is-open .curtain-fold--1 { transform: translateX(0); }
+
+/* Right panel fold positioning */
+.curtain-wing--right .curtain-fold--1 { right: 0%;   z-index: 1; }
+.curtain-wing--right .curtain-fold--2 { right: 16%;  z-index: 2; }
+.curtain-wing--right .curtain-fold--3 { right: 32%;  z-index: 3; }
+.curtain-wing--right .curtain-fold--4 { right: 48%;  z-index: 4; }
+.curtain-wing--right .curtain-fold--5 { right: 64%;  z-index: 5; }
+.curtain-wing--right .curtain-fold--6 { right: 80%;  z-index: 6; width: 23%; }
+
+/* Right folds accordion-compress inward toward the right wing as the curtain pulls open */
+.curtain-wing--right.is-open .curtain-fold--6 { transform: translateX(15%); }
+.curtain-wing--right.is-open .curtain-fold--5 { transform: translateX(25%); }
+.curtain-wing--right.is-open .curtain-fold--4 { transform: translateX(35%); }
+.curtain-wing--right.is-open .curtain-fold--3 { transform: translateX(45%); }
+.curtain-wing--right.is-open .curtain-fold--2 { transform: translateX(55%); }
+.curtain-wing--right.is-open .curtain-fold--1 { transform: translateX(0); }
+
+/* ── Golden Braided Seams along center parting line ── */
+.curtain-seam-braid {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 9px;
+  background: repeating-linear-gradient(
+    180deg,
+    #8A640D 0px,
+    #D6A52E 6px,
+    #F5D061 12px,
+    #8A640D 18px
+  );
+  z-index: 10;
+  box-shadow: 0 0 16px rgba(214, 165, 46, 0.6), 0 0 6px rgba(0, 0, 0, 0.7);
+  will-change: transform;
+}
+
+.curtain-seam-braid--left {
+  right: 0;
+}
+
+.curtain-seam-braid--right {
+  left: 0;
+}
+
+/* ── Decorative Gold Tiebacks at wings ── */
+.curtain-tieback {
+  position: absolute;
+  top: 55%;
+  width: 28px;
+  height: 50px;
+  border: 3px solid #D6A52E;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(214, 165, 46, 0.5);
+  opacity: 0;
+  z-index: 15;
+  transition: opacity 0.6s ease 0.8s;
+  pointer-events: none;
+}
+
+.curtain-tieback--left {
+  left: 12px;
+}
+
+.curtain-tieback--right {
+  right: 12px;
+}
+
+.curtain-wing.is-open .curtain-tieback {
+  opacity: 0.9;
+}
+
+/* ── Top Scalloped Valance / Pelmet ── */
+.curtain-top-pelmet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(52px, 8.5vw, 88px);
+  z-index: 40;
+  background: linear-gradient(180deg, #1f0404 0%, #4d0d0d 65%, #330606 100%);
+  border-bottom: 3.5px solid var(--gold);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8);
+  will-change: transform;
+  transform: translateY(0);
+  transition: transform 1.6s cubic-bezier(0.77, 0, 0.175, 1) 0.1s;
+}
+
+.curtain-top-pelmet.is-open {
+  transform: translateY(-112%);
+}
+
+.curtain-pelmet-fringe {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    #8A640D 0px,
+    #F5D061 5px,
+    #D6A52E 10px
+  );
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ── Center Stage Light Flare ── */
+.curtain-center-flare {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 6px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 245, 190, 1) 0%,
+    rgba(240, 200, 78, 0.6) 35%,
+    rgba(214, 165, 46, 0.2) 65%,
+    transparent 85%
+  );
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, width 1.3s ease, transform 1.3s ease;
+}
+
+.curtain-center-flare.is-open {
+  opacity: 0;
+  width: clamp(120px, 45vw, 550px);
+  transform: translateX(-50%) scaleX(2.2);
+  filter: blur(14px);
+  transition: opacity 1.4s ease 0.3s, width 1.4s ease, transform 1.4s ease;
+}
+
+/* Mobile Tuning */
+@media (max-width: 768px) {
+  .curtain-fold {
+    box-shadow: 
+      -4px 0 12px rgba(0, 0, 0, 0.6),
+      inset -2px 0 8px rgba(0, 0, 0, 0.45);
+  }
+  .curtain-seam-braid {
+    width: 6px;
   }
 }

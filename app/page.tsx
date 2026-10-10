@@ -1,3 +1,4 @@
+import CurtainIntro from "@/components/CurtainIntro";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import EventHighlights from "@/components/EventHighlights";
@@ -11,6 +12,7 @@ import StickyCTA from "@/components/StickyCTA";
 export default function Home() {
   return (
     <>
+      <CurtainIntro />
       <Navbar />
       <main id="main-content">
         <Hero />
